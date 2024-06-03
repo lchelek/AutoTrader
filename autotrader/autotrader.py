@@ -21,6 +21,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Callable, Optional, Literal, Union
 from autotrader.brokers.ccxt import Broker as CCXTBroker
 from autotrader.brokers.virtual import Broker as VirtualBroker
+import csv
 from autotrader.utilities import (
     read_yaml,
     get_broker_config,
@@ -1750,11 +1751,40 @@ class AutoTrader:
             objective = -trade_results["ending_NAV"]
             print("== Trade Results : ==============================================")
             print(trade_results)
-            print("Now saving trader results to CSV file")
-            res_df = pd.DataFrame.from_dict(trade_results,orient="index")
-            res_df.to_csv("BackTest-Optimization-Result.csv" , header=True , mode='a')
+            print("Now saving trader results to CSV....")
+            print(config_dict)
+            print(config_dict["PARAMETERS"])
+            #par_df = pd.DataFrame.from_dict(config_dict)
+            
+            end_df = {**config_dict, **trade_results}
+            
+            print(end_df)
+            #end_df = pd.DataFrame.from_dict(end_df)
+            
+            #res_df = pd.DataFrame.from_dict(trade_results)
+            #cfg_df = pd.DataFrame.from_dict(config_dict["PARAMETERS"] , orient='index')
+            #end_df = {**cfg_df, **res_df}
+
+
+            fieldnames = list(end_df.keys())
+
+            try:
+                with open('BackTest-Optimization-Result.csv', 'x', newline='') as csvfile:
+                    writer = csv.DictWriter(csvfile, fieldnames=fieldnames )
+                    writer.writeheader()  # Write the header row
+
+            except FileExistsError: 
+                print(f"The file already exists.") 
+
+
+                # Write the dictionary data to a CSV file
+                with open('BackTest-Optimization-Result.csv', 'a', newline='') as csvfile:
+                    writer = csv.DictWriter(csvfile, fieldnames=fieldnames )
+                    writer.writerow(end_df)  # Write the data row
+
+            #end_df.to_csv("BackTest-Optimization-Result.csv" , index=False, header=True , mode='a')
             print("=================================================================")
-            trade_results.
+            
 
         except Exception as e:
             print("Error Detected in Traderesults : " + str(e))
