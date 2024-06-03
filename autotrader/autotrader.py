@@ -1677,7 +1677,7 @@ class AutoTrader:
 
         # Modify verbosity for optimisation
         verbosity = self._verbosity
-        self._verbosity = 0
+        self._verbosity = 2
         self._show_plot = False
         self.objective = "profit + MDD"
 
@@ -1700,6 +1700,11 @@ class AutoTrader:
         )
         stop = timeit.default_timer()
 
+        print("Result of Brute force testing for this iteration : ")
+        print(result)
+
+
+
         opt_params = result[0]
         opt_value = result[1]
 
@@ -1709,6 +1714,14 @@ class AutoTrader:
         self.logger.info(opt_params)
         self.logger.info("Objective:")
         self.logger.info(opt_value)
+        
+        print("\nOptimisation complete.")
+        print("Time to run: {}s".format(round((stop - start), 3)))
+        print("Optimal parameters:")
+        print(opt_params)
+        print("Objective:")
+        print(opt_value)
+
 
         # Reset verbosity
         self._verbosity = verbosity
@@ -1734,11 +1747,14 @@ class AutoTrader:
 
         try:
             trade_results = self.trade_results.summary()
-            objective = -trade_results["all_trades"]["ending_NAV"]
+            objective = -trade_results["ending_NAV"]
+            print("Trade Results : ")
+            print(trade_results)
         except:
             objective = 1000
 
         self.logger.debug("Parameters/objective:", params, "/", round(objective, 3))
+        print("Parameters/objective:", params, "/", round(objective, 3))
 
         return objective
 
