@@ -1748,9 +1748,16 @@ class AutoTrader:
         try:
             trade_results = self.trade_results.summary()
             objective = -trade_results["ending_NAV"]
-            print("Trade Results : ")
+            print("== Trade Results : ==============================================")
             print(trade_results)
-        except:
+            print("Now saving trader results to CSV file")
+            res_df = pd.DataFrame.from_dict(trade_results,orient="index")
+            res_df.to_csv("BackTest-Optimization-Result.csv" , header=True , mode='a')
+            print("=================================================================")
+            trade_results.
+
+        except Exception as e:
+            print("Error Detected in Traderesults : " + str(e))
             objective = 1000
 
         self.logger.debug("Parameters/objective:", params, "/", round(objective, 3))
