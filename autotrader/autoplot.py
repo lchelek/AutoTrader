@@ -4,7 +4,7 @@ import pandas as pd
 from math import pi
 from typing import Union
 from bokeh.models.annotations import Title
-from bokeh.plotting import figure, output_file, show
+from bokeh.plotting import figure, output_file, show , save
 from bokeh.io import output_notebook, curdoc
 from bokeh.models import (
     CustomJS,
@@ -306,8 +306,9 @@ class AutoPlot:
                 title_string = f"AutoTrader IndiView - {instrument}"
             else:
                 title_string = "AutoTrader IndiView"
-            output_file("indiview-chart.html", title=title_string)
-
+            #output_file("indiview-chart.html", title=title_string)
+            output_file("plots/"+instrument+".html", title=title_string)
+            
         else:
             # Plotting backtest results
             if instrument is None:
@@ -427,8 +428,12 @@ class AutoPlot:
 
         # Compile plots for final figure
         plots = top_figs + [main_plot] + bottom_figs
-        linked_crosshair = CrosshairTool(dimensions="both")
+        #linked_crosshair = CrosshairTool(dimensions="both")
+        #CrosshairTool(overlay=[width, height])
+        #width = Span(dimension="width")
+        height = Span(dimension="height")
 
+        linked_crosshair = CrosshairTool(overlay=height)
         titled = 0
         t = Title()
         t.text = title_string
@@ -479,7 +484,7 @@ class AutoPlot:
         if show_fig:
             if self._jupyter_notebook:
                 output_notebook()
-            show(fig)
+            save(fig)
 
     def _reindex_data(self, data: pd.DataFrame) -> pd.DataFrame:
         """Resets index of data to obtain integer indexing."""
@@ -873,7 +878,7 @@ class AutoPlot:
 
         if self._jupyter_notebook:
             output_notebook()
-        show(fig)
+        save(fig)
 
     def _plot_indicators(self, indicators: dict, linked_fig):
         """Plots indicators based on indicator type. If inidcator type is
