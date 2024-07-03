@@ -1160,7 +1160,7 @@ class LocalDataStream(DataStream):
 
         # Load
         candles = pd.read_csv(filepath, index_col=0, parse_dates=True)
-
+        
         return candles
 
     def get_orderbook(self, instrument: str, *args, **kwargs):

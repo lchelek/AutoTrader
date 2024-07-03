@@ -1756,6 +1756,21 @@ class AutoTrader:
             print(config_dict["PARAMETERS"])
             #par_df = pd.DataFrame.from_dict(config_dict)
             
+            #print("myTimings ---------------")
+            #print(self._backtest_start_time)
+            #backtest_end_time = timeit.default_timer()
+            #print(self.backtest_end_time)
+            
+            
+            #print(f"{round((backtest_end_time - self._backtest_start_time), 3)} s)")
+            
+            print("myTimings ---------------")
+            
+            #my_runtime = {round((self.trade_results.backtest_end_time - self._backtest_start_time), 3)}
+            #exp_runtime['runtime'] = my_runtime
+            
+            
+            
             end_df = {**config_dict, **trade_results}
             
             print(end_df)
@@ -1955,6 +1970,26 @@ class AutoTrader:
             # Create trade results for each bot
             for bot in self._bots_deployed:
                 bot._create_trade_results(broker_histories=self._broker_histories)
+                
+            ### <lukasz> that works and returns history of virtual trades : 
+            
+            print(" ==== Instruments =================================")
+            print(bot.trade_results.instruments_traded)
+            print(" ==== Order history ===============================")
+            print(bot.trade_results.order_history)
+            print(" ==== Cancelled Orders ============================")
+            print(bot.trade_results.cancelled_orders)
+            print(" ==== Trade history ===============================")
+            print(bot.trade_results.trade_history)
+            print(" ==================================================")
+            #print(bot._broker_histories['virtual'].keys())
+            #for key in bot._broker_histories['virtual'].keys():
+                #print(key)
+                #print(bot._broker_histories['virtual'][key])
+                
+            with open(f"detailed_history.pickle", "wb") as file:
+                pickle.dump(self._broker_histories, file)
+
 
             if int(self._verbosity) > 0:
                 print(
