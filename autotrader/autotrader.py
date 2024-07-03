@@ -1972,7 +1972,7 @@ class AutoTrader:
                 bot._create_trade_results(broker_histories=self._broker_histories)
                 
             ### <lukasz> that works and returns history of virtual trades : 
-            
+            '''
             print(" ==== Instruments =================================")
             print(bot.trade_results.instruments_traded)
             print(" ==== Order history ===============================")
@@ -1986,10 +1986,10 @@ class AutoTrader:
             #for key in bot._broker_histories['virtual'].keys():
                 #print(key)
                 #print(bot._broker_histories['virtual'][key])
-                
+            
             with open(f"detailed_history.pickle", "wb") as file:
                 pickle.dump(self._broker_histories, file)
-
+            ''' 
 
             if int(self._verbosity) > 0:
                 print(
